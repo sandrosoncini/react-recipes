@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
+import { RecipeList } from './components/recipes-list';
 
 function App() {
  
   const [recipes, setRecipes] = useState([])
+  const [selectedRecipe, setSelectedRecipe] = useState(null)
   
   useEffect (() => {
     fetch("http://127.0.0.1:8000/api/recipes/", {
@@ -16,6 +18,10 @@ function App() {
       .catch(err => console.log(err))
   }, [])
 
+  const recipeClicked = recipe =>{
+    setSelectedRecipe(recipe);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -25,21 +31,19 @@ function App() {
           <input type="text" placeholder="Search.." />
           <div className="select-fields">
             <select required>
-              <option value="" disabled selected hidden>Protein type</option>
-              <option>Beef</option>
-              <option>Chicken</option>
-              <option>Turkey</option>
-              <option>Fish</option>
-              <option>Sea food</option>
-              <option>Vegan</option>
+              {/* <option disabled selected hidden>Protein type</option> */}
+              <option value="beef">Beef</option>
+              <option value="chicken">Chicken</option>
+              <option value="turkey">Turkey</option>
+              <option value="fish">Fish</option>
+              <option value="sea-food">Sea food</option>
+              <option value="vegan">Vegan</option>
             </select>
             <input type="text" placeholder="Nutrition" />
           </div>
           <div className="recipe-layout">
             <div>
-              {recipes.map(recipe => {
-                return (<h2>{recipe.name}</h2>)
-              })}
+              <RecipeList recipes={recipes} recipeClicked={recipeClicked}/>
             </div>
             <div>Recipe Details </div>
           </div>
